@@ -125,12 +125,16 @@ def display_recipe(results, title, color_emoji):
 # ---------------------------------------------------------------------
 
 st.title("🍩 Pokémon Legends: Z-A Donut Calculator")
+
+# --- NEW INTRO TEXT ---
 st.markdown("""
-**Instructions:**
-1. Enter your **Inventory** in the table below (Look for the **✏️** column).
-2. Select the **Donut** you want to craft.
-3. Click **Calculate**.
+When you don't have many rare berries in your satchel, it can be difficult or annoying to check if you are able to create the donuts to battle the Legendary Pokémon. 
+This guide helps you figure out if it is possible to create each donut based on your inventory. 
+It also suggests an economical (using fewer rare berries) and a luxurious (using rare berries, giving full power) recipe. 
+
+Hope this helps!
 """)
+st.markdown("---")
 
 # --- INPUT SECTION ---
 
@@ -139,7 +143,6 @@ target_donut_name = st.selectbox("Select Target Donut:", list(recipes.keys()))
 st.subheader("Your Inventory")
 
 # Mobile Friendly Toggle
-# FIX APPLIED HERE: help="..." instead of help(...)
 show_stats = st.checkbox("Show Berry Stats", value=False, help="Check this to see detailed flavor values.")
 
 # Define which columns to display
