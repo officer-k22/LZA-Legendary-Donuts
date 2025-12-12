@@ -7,9 +7,9 @@ from io import StringIO
 # 1. SETUP & DATA
 # ---------------------------------------------------------------------
 
-st.set_page_config(page_title="Z-A Donut Calculator", page_icon="🍩", layout="wide")
+st.set_page_config(page_title="Z-A Donut Calculator", page_icon="🍩", layout="centered") 
+# layout="centered" keeps the app neat and not too wide on large screens
 
-# The complete berry data with stats
 berry_csv = """
 Name,Sweet,Spicy,Sour,Bitter,Fresh,Lv_Boost,Cal
 Hyper Cheri,0,40,0,0,5,5,80
@@ -57,7 +57,6 @@ recipes = {
 
 # Load Data
 df = pd.read_csv(StringIO(berry_csv))
-# Add Inventory column initialized to 0
 if "Inventory" not in df.columns:
     df["Inventory"] = 0
 
@@ -66,43 +65,27 @@ if "Inventory" not in df.columns:
 # ---------------------------------------------------------------------
 
 def solve_donut(data, target_stats, mode="min"):
-    """
-    Solves the optimization problem.
-    mode='min': Economy (uses top berries, few slots)
-    mode='max': Luxury (uses bottom berries, max slots)
-    """
-    
     sense = LpMinimize if mode == "min" else LpMaximize
     prob = LpProblem("DonutOpt", sense)
     
-    # Variables
     berry_vars = {}
     for i, row in data.iterrows():
         name = row['Name']
-        # Upper bound is the inventory count provided by user
         berry_vars[name] = LpVariable(f"count_{name}", lowBound=0, upBound=row['Inventory'], cat='Integer')
 
-    # Objective Function: Weight by list position (Index)
-    # Top of list = Low Cost/Value | Bottom of list = High Cost/Value
     objective_terms = []
     for i, row in data.iterrows():
-        # (i+1) ensures costs are 1, 2, 3... 33
         objective_terms.append((i + 1) * berry_vars[row['Name']])
     
     prob += lpSum(objective_terms)
 
-    # Constraints
-    # 1. Flavor Stats
     for stat in ["Sweet", "Spicy", "Sour", "Bitter", "Fresh"]:
         prob += lpSum([data.loc[i, stat] * berry_vars[data.loc[i, 'Name']] for i in data.index]) >= target_stats[stat]
         
-    # 2. Max 8 Slots
     prob += lpSum(berry_vars.values()) <= 8
     
-    # Solve
     prob.solve()
     
-    # Return results if optimal
     if LpStatus[prob.status] == "Optimal":
         results = []
         for i, row in data.iterrows():
@@ -115,19 +98,13 @@ def solve_donut(data, target_stats, mode="min"):
         return None
 
 def display_recipe(results, title, color_emoji):
-    """Helper to display the result card"""
     if results:
         st.success(f"### {color_emoji} {title}")
         res_df = pd.DataFrame(results)
-        
-        # Display Ingredients Table
         st.dataframe(res_df[["Berry", "Count"]], hide_index=True, use_container_width=True)
-        
-        # Calculate Totals
         total_slots = sum(r['Count'] for r in results)
         total_cal = sum(r['Count'] * r['Cal'] for r in results)
         total_boost = sum(r['Count'] * r['Lv_Boost'] for r in results)
-        
         st.markdown(f"**Slots:** {total_slots}/8  |  **Calories:** {total_cal}  |  **Lv. Boost:** +{total_boost}")
     else:
         st.error(f"### {color_emoji} {title}\nNot possible with current inventory.")
@@ -139,64 +116,56 @@ def display_recipe(results, title, color_emoji):
 st.title("🍩 Pokémon Legends: Z-A Donut Calculator")
 st.markdown("""
 **Instructions:**
-1. Update your **Inventory** in the list below.
+1. Enter your **Inventory** in the table below.
 2. Select the **Donut** you want to craft.
-3. Click **Calculate** to see both the cheapest (Economy) and most valuable (Luxury) recipes.
+3. Click **Calculate**.
 """)
 
-# --- INPUT SECTION ---
-
-# Donut Selection
+# Input Section
 target_donut_name = st.selectbox("Select Target Donut:", list(recipes.keys()))
 
 st.subheader("Your Inventory")
-st.markdown("Edit the **Inventory** column directly:")
 
-# Data Editor: This creates the Excel-like table
-# We configure it so only "Inventory" is editable
+# Configuration for the table columns
+# We use full names here ("Sweet", "Spicy"...) but keep width="small"
+column_cfg = {
+    "Name": st.column_config.TextColumn("Berry", disabled=True, width="medium"),
+    "Inventory": st.column_config.NumberColumn("Inventory (Qty)", min_value=0, step=1, required=True, width="small"),
+    "Sweet": st.column_config.NumberColumn("Sweet", disabled=True, width="small"),
+    "Spicy": st.column_config.NumberColumn("Spicy", disabled=True, width="small"),
+    "Sour": st.column_config.NumberColumn("Sour", disabled=True, width="small"),
+    "Bitter": st.column_config.NumberColumn("Bitter", disabled=True, width="small"),
+    "Fresh": st.column_config.NumberColumn("Fresh", disabled=True, width="small"),
+    "Lv_Boost": st.column_config.NumberColumn("Lv. Boost", disabled=True, width="small"),
+    "Cal": st.column_config.NumberColumn("Cal", disabled=True, width="small"),
+}
+
 edited_df = st.data_editor(
     df,
-    column_config={
-        "Name": st.column_config.TextColumn("Berry Name", disabled=True),
-        "Inventory": st.column_config.NumberColumn("Inventory (Qty)", min_value=0, step=1, required=True),
-        "Sweet": st.column_config.NumberColumn(disabled=True),
-        "Spicy": st.column_config.NumberColumn(disabled=True),
-        "Sour": st.column_config.NumberColumn(disabled=True),
-        "Bitter": st.column_config.NumberColumn(disabled=True),
-        "Fresh": st.column_config.NumberColumn(disabled=True),
-        "Lv_Boost": st.column_config.NumberColumn(disabled=True),
-        "Cal": st.column_config.NumberColumn(disabled=True),
-    },
+    column_config=column_cfg,
     hide_index=True,
-    use_container_width=True,
-    height=500 # Make it tall enough to see many berries
+    use_container_width=False,  # Prevents stretching to full width
+    num_rows="fixed",           # Prevents adding/deleting rows (keeps order stable)
+    height=600
 )
-
-# --- CALCULATION SECTION ---
 
 st.markdown("---")
 
 if st.button("Calculate Recipes", type="primary", use_container_width=True):
-    
     target_stats = recipes[target_donut_name]
     
-    # 1. Calculate Economy (Minimizes Cost/Rarity)
     economy_res = solve_donut(edited_df, target_stats, mode="min")
-    
-    # 2. Calculate Luxury (Maximizes Cost/Rarity)
     luxury_res = solve_donut(edited_df, target_stats, mode="max")
     
-    # Display Results in two columns
     col1, col2 = st.columns(2)
     
     with col1:
         display_recipe(economy_res, "Economy Recipe", "🟢")
-        st.caption("*Uses the most common berries (top of list) and fewest slots possible.*")
+        st.caption("*Uses common berries (top of list).*")
         
     with col2:
         display_recipe(luxury_res, "Luxury Recipe", "🟣")
-        st.caption("*Uses the rarest berries (bottom of list) and fills up slots for max stats.*")
+        st.caption("*Uses rare berries (bottom of list).*")
 
-    # Show Required Stats for reference
-    with st.expander("See Required Flavor Stats"):
+    with st.expander("Show Required Flavor Stats"):
         st.write(target_stats)
