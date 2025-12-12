@@ -60,6 +60,9 @@ df = pd.read_csv(StringIO(berry_csv))
 if "Inventory" not in df.columns:
     df["Inventory"] = 0
 
+# Reorder columns: Put Inventory as the second column
+df = df[["Name", "Inventory", "Sweet", "Spicy", "Sour", "Bitter", "Fresh", "Lv_Boost", "Cal"]]
+
 # ---------------------------------------------------------------------
 # 2. FUNCTIONS
 # ---------------------------------------------------------------------
@@ -127,7 +130,6 @@ target_donut_name = st.selectbox("Select Target Donut:", list(recipes.keys()))
 st.subheader("Your Inventory")
 
 # Configuration for the table columns
-# Added emoji icons to clearly distinguish Editable vs Read-Only fields
 column_cfg = {
     "Name": st.column_config.TextColumn("Berry Name", disabled=True, width="medium"),
     
@@ -155,7 +157,7 @@ edited_df = st.data_editor(
     df,
     column_config=column_cfg,
     hide_index=True,
-    use_container_width=True,   # Fits the container width (avoids scrolling if possible)
+    use_container_width=True,   # Fits the container width
     num_rows="fixed",           # Keeps the row order fixed
     height=600
 )
