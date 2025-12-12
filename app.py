@@ -7,7 +7,7 @@ from io import StringIO
 # 1. SETUP & DATA
 # ---------------------------------------------------------------------
 
-# layout="centered" keeps it centered on screen (not too wide)
+# layout="centered" looks best on mobile and desktop
 st.set_page_config(page_title="Z-A Donut Calculator", page_icon="🍩", layout="centered") 
 
 berry_csv = """
@@ -60,31 +60,37 @@ df = pd.read_csv(StringIO(berry_csv))
 if "Inventory" not in df.columns:
     df["Inventory"] = 0
 
-# Reorder columns: Put Inventory as the second column
-df = df[["Name", "Inventory", "Sweet", "Spicy", "Sour", "Bitter", "Fresh", "Lv_Boost", "Cal"]]
-
 # ---------------------------------------------------------------------
 # 2. FUNCTIONS
 # ---------------------------------------------------------------------
 
 def solve_donut(data, target_stats, mode="min"):
+    """
+    Solves the optimization problem using Pulp.
+    """
     sense = LpMinimize if mode == "min" else LpMaximize
     prob = LpProblem("DonutOpt", sense)
     
     berry_vars = {}
     for i, row in data.iterrows():
         name = row['Name']
+        # Upper bound is the inventory count provided by user
         berry_vars[name] = LpVariable(f"count_{name}", lowBound=0, upBound=row['Inventory'], cat='Integer')
 
+    # Objective Function: Weight by list position (Index)
     objective_terms = []
     for i, row in data.iterrows():
+        # (i+1) ensures costs are increasing (1, 2, 3...)
         objective_terms.append((i + 1) * berry_vars[row['Name']])
     
     prob += lpSum(objective_terms)
 
+    # Constraints
+    # 1. Flavor Stats
     for stat in ["Sweet", "Spicy", "Sour", "Bitter", "Fresh"]:
         prob += lpSum([data.loc[i, stat] * berry_vars[data.loc[i, 'Name']] for i in data.index]) >= target_stats[stat]
         
+    # 2. Max 8 Slots
     prob += lpSum(berry_vars.values()) <= 8
     
     prob.solve()
@@ -105,9 +111,11 @@ def display_recipe(results, title, color_emoji):
         st.success(f"### {color_emoji} {title}")
         res_df = pd.DataFrame(results)
         st.dataframe(res_df[["Berry", "Count"]], hide_index=True, use_container_width=True)
+        
         total_slots = sum(r['Count'] for r in results)
         total_cal = sum(r['Count'] * r['Cal'] for r in results)
         total_boost = sum(r['Count'] * r['Lv_Boost'] for r in results)
+        
         st.markdown(f"**Slots:** {total_slots}/8  |  **Calories:** {total_cal}  |  **Lv. Boost:** +{total_boost}")
     else:
         st.error(f"### {color_emoji} {title}\nNot possible with current inventory.")
@@ -124,10 +132,22 @@ st.markdown("""
 3. Click **Calculate**.
 """)
 
-# Input Section
+# --- INPUT SECTION ---
+
 target_donut_name = st.selectbox("Select Target Donut:", list(recipes.keys()))
 
 st.subheader("Your Inventory")
+
+# Mobile Friendly Toggle
+show_stats = st.checkbox("Show Berry Stats", value=False, help("Check this to see detailed flavor values."))
+
+# Define which columns to display
+cols_to_show = ["Name", "Inventory"]
+if show_stats:
+    cols_to_show += ["Sweet", "Spicy", "Sour", "Bitter", "Fresh", "Lv_Boost", "Cal"]
+
+# Filter the dataframe for display
+df_display = df[cols_to_show]
 
 # Configuration for the table columns
 column_cfg = {
@@ -143,7 +163,7 @@ column_cfg = {
         width="small"
     ),
     
-    # READ-ONLY (Lock icon)
+    # READ-ONLY (Lock icon) - Full Names
     "Sweet": st.column_config.NumberColumn("🔒 Sweet", disabled=True, width="small"),
     "Spicy": st.column_config.NumberColumn("🔒 Spicy", disabled=True, width="small"),
     "Sour": st.column_config.NumberColumn("🔒 Sour", disabled=True, width="small"),
@@ -153,22 +173,31 @@ column_cfg = {
     "Cal": st.column_config.NumberColumn("🔒 Cal", disabled=True, width="small"),
 }
 
+# The Data Editor
 edited_df = st.data_editor(
-    df,
+    df_display,
     column_config=column_cfg,
     hide_index=True,
-    use_container_width=True,   # Fits the container width
-    num_rows="fixed",           # Keeps the row order fixed
-    height=600
+    use_container_width=True,
+    num_rows="fixed", 
+    height=600 if show_stats else 400 # Smaller height on mobile view
 )
+
+# SYNC LOGIC: Update the main dataframe with user inputs
+# We need to do this because 'edited_df' might be missing columns if show_stats is False
+df.set_index("Name", inplace=True)
+df_display_indexed = edited_df.set_index("Name")
+df.update(df_display_indexed[["Inventory"]])
+df.reset_index(inplace=True)
 
 st.markdown("---")
 
 if st.button("Calculate Recipes", type="primary", use_container_width=True):
     target_stats = recipes[target_donut_name]
     
-    economy_res = solve_donut(edited_df, target_stats, mode="min")
-    luxury_res = solve_donut(edited_df, target_stats, mode="max")
+    # Solve using the FULL dataframe (df), which now has updated inventory
+    economy_res = solve_donut(df, target_stats, mode="min")
+    luxury_res = solve_donut(df, target_stats, mode="max")
     
     col1, col2 = st.columns(2)
     
