@@ -7,8 +7,8 @@ from io import StringIO
 # 1. SETUP & DATA
 # ---------------------------------------------------------------------
 
+# layout="centered" keeps it centered on screen (not too wide)
 st.set_page_config(page_title="Z-A Donut Calculator", page_icon="🍩", layout="centered") 
-# layout="centered" keeps the app neat and not too wide on large screens
 
 berry_csv = """
 Name,Sweet,Spicy,Sour,Bitter,Fresh,Lv_Boost,Cal
@@ -116,7 +116,7 @@ def display_recipe(results, title, color_emoji):
 st.title("🍩 Pokémon Legends: Z-A Donut Calculator")
 st.markdown("""
 **Instructions:**
-1. Enter your **Inventory** in the table below.
+1. Enter your **Inventory** in the table below (Look for the **✏️** column).
 2. Select the **Donut** you want to craft.
 3. Click **Calculate**.
 """)
@@ -127,25 +127,36 @@ target_donut_name = st.selectbox("Select Target Donut:", list(recipes.keys()))
 st.subheader("Your Inventory")
 
 # Configuration for the table columns
-# We use full names here ("Sweet", "Spicy"...) but keep width="small"
+# Added emoji icons to clearly distinguish Editable vs Read-Only fields
 column_cfg = {
-    "Name": st.column_config.TextColumn("Berry", disabled=True, width="medium"),
-    "Inventory": st.column_config.NumberColumn("Inventory (Qty)", min_value=0, step=1, required=True, width="small"),
-    "Sweet": st.column_config.NumberColumn("Sweet", disabled=True, width="small"),
-    "Spicy": st.column_config.NumberColumn("Spicy", disabled=True, width="small"),
-    "Sour": st.column_config.NumberColumn("Sour", disabled=True, width="small"),
-    "Bitter": st.column_config.NumberColumn("Bitter", disabled=True, width="small"),
-    "Fresh": st.column_config.NumberColumn("Fresh", disabled=True, width="small"),
-    "Lv_Boost": st.column_config.NumberColumn("Lv. Boost", disabled=True, width="small"),
-    "Cal": st.column_config.NumberColumn("Cal", disabled=True, width="small"),
+    "Name": st.column_config.TextColumn("Berry Name", disabled=True, width="medium"),
+    
+    # EDITABLE (Pencil icon)
+    "Inventory": st.column_config.NumberColumn(
+        "✏️ Inventory (Qty)", 
+        help="Enter the amount you have in your bag.",
+        min_value=0, 
+        step=1, 
+        required=True, 
+        width="small"
+    ),
+    
+    # READ-ONLY (Lock icon)
+    "Sweet": st.column_config.NumberColumn("🔒 Sweet", disabled=True, width="small"),
+    "Spicy": st.column_config.NumberColumn("🔒 Spicy", disabled=True, width="small"),
+    "Sour": st.column_config.NumberColumn("🔒 Sour", disabled=True, width="small"),
+    "Bitter": st.column_config.NumberColumn("🔒 Bitter", disabled=True, width="small"),
+    "Fresh": st.column_config.NumberColumn("🔒 Fresh", disabled=True, width="small"),
+    "Lv_Boost": st.column_config.NumberColumn("🔒 Lv. Boost", disabled=True, width="small"),
+    "Cal": st.column_config.NumberColumn("🔒 Cal", disabled=True, width="small"),
 }
 
 edited_df = st.data_editor(
     df,
     column_config=column_cfg,
     hide_index=True,
-    use_container_width=False,  # Prevents stretching to full width
-    num_rows="fixed",           # Prevents adding/deleting rows (keeps order stable)
+    use_container_width=True,   # Fits the container width (avoids scrolling if possible)
+    num_rows="fixed",           # Keeps the row order fixed
     height=600
 )
 
