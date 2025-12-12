@@ -139,7 +139,8 @@ target_donut_name = st.selectbox("Select Target Donut:", list(recipes.keys()))
 st.subheader("Your Inventory")
 
 # Mobile Friendly Toggle
-show_stats = st.checkbox("Show Berry Stats", value=False, help("Check this to see detailed flavor values."))
+# FIX APPLIED HERE: help="..." instead of help(...)
+show_stats = st.checkbox("Show Berry Stats", value=False, help="Check this to see detailed flavor values.")
 
 # Define which columns to display
 cols_to_show = ["Name", "Inventory"]
