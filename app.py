@@ -348,36 +348,42 @@ recipes = {
     "Zeraora (Plasma-Glazed)":        {"Sweet":40,  "Spicy":200, "Sour":400, "Bitter":280, "Fresh":40}
 }
 
-# --- EXAMPLE RECIPES DATA ---
-# Feel free to edit these ingredients to match game meta.
+# --- EXAMPLE RECIPES DATA (4 Examples per Donut) ---
+# Constraint 1: "Rainbow Variety" - Max 1 berry per type (approx).
+# Constraint 2: "Balanced Pair" - Max 2 berries per type.
+# Constraint 3/4: "Bulk/Specialized" - Unrestricted.
 EXAMPLE_RECIPES = {
     "Darkrai (Bad Dream Cruller)": [
-        {"Name": "Sour Boost", "Ingredients": "4x Hyper Payapa, 2x Hyper Colbur"},
-        {"Name": "Dream Mix", "Ingredients": "3x Hyper Chesto, 3x Hyper Payapa, 1x Hyper Haban"},
-        {"Name": "Simple Dark", "Ingredients": "2x Hyper Colbur, 4x Hyper Pecha"}
+        {"Name": "Rainbow Dream (Variety)", "Ingredients": "1x Tanga, 1x Kasib, 1x Colbur, 1x Payapa, 1x Roseli, 1x Haban, 1x Yache, 1x Chople"},
+        {"Name": "Balanced Nightmare", "Ingredients": "2x Hyper Tanga, 2x Hyper Kasib, 2x Hyper Roseli, 1x Hyper Colbur"},
+        {"Name": "Sour Punch (Bulk)", "Ingredients": "4x Hyper Payapa, 2x Hyper Colbur"},
+        {"Name": "Sweet Darkness (Bulk)", "Ingredients": "3x Hyper Tanga, 3x Hyper Kasib, 1x Hyper Coba"}
     ],
     "Groudon (Omega Old-Fashioned)": [
-        {"Name": "Magma Mix", "Ingredients": "3x Hyper Tanga, 2x Hyper Grepa, 1x Hyper Pomeg"},
-        {"Name": "Spicy Heavy", "Ingredients": "4x Hyper Chilan, 2x Hyper Cheri"},
-        {"Name": "Fresh Heat", "Ingredients": "3x Hyper Tanga, 3x Hyper Occa"}
+        {"Name": "Earthy Rainbow (Variety)", "Ingredients": "1x Tanga, 1x Grepa, 1x Pomeg, 1x Occa, 1x Hondew, 1x Qualot, 1x Tamato"},
+        {"Name": "Magma Duo (Balanced)", "Ingredients": "2x Hyper Tanga, 2x Hyper Grepa, 2x Hyper Tamato, 1x Hyper Pomeg"},
+        {"Name": "Heat Wave (Bulk)", "Ingredients": "4x Hyper Chilan, 3x Hyper Cheri"},
+        {"Name": "Volcanic Ash", "Ingredients": "3x Hyper Tanga, 3x Hyper Occa, 2x Hyper Shuca"}
     ],
     "Kyogre (Alpha Old-Fashioned)": [
-        {"Name": "Deep Sea", "Ingredients": "3x Hyper Kelpsy, 3x Hyper Hondew"},
-        {"Name": "Bitter Wave", "Ingredients": "4x Hyper Rawst, 2x Hyper Passho"},
-        {"Name": "Blue Orb", "Ingredients": "2x Hyper Kelpsy, 4x Hyper Chesto"}
+        {"Name": "Ocean Palette (Variety)", "Ingredients": "1x Kelpsy, 1x Hondew, 1x Chesto, 1x Rawst, 1x Passho, 1x Aspear, 1x Sitrus"},
+        {"Name": "Tidal Pairs (Balanced)", "Ingredients": "2x Hyper Kelpsy, 2x Hyper Chesto, 2x Hyper Passho, 1x Hyper Rawst"},
+        {"Name": "Deep Blue (Bulk)", "Ingredients": "3x Hyper Kelpsy, 3x Hyper Hondew"},
+        {"Name": "Storm Surge", "Ingredients": "4x Hyper Passho, 4x Hyper Chesto"}
     ],
     "Rayquaza (Delta Old-Fashioned)": [
-        {"Name": "Sky High", "Ingredients": "3x Hyper Yache, 3x Hyper Coba"},
-        {"Name": "Ozone Mix", "Ingredients": "4x Hyper Wacan, 2x Hyper Haban"},
-        {"Name": "Dragon Breath", "Ingredients": "3x Hyper Haban, 3x Hyper Roseli"}
+        {"Name": "Sky Spectrum (Variety)", "Ingredients": "1x Yache, 1x Coba, 1x Wacan, 1x Haban, 1x Roseli, 1x Babiri, 1x Charti"},
+        {"Name": "Ozone Layer (Balanced)", "Ingredients": "2x Hyper Yache, 2x Hyper Wacan, 2x Hyper Haban, 1x Hyper Coba"},
+        {"Name": "Dragon Ascent (Bulk)", "Ingredients": "3x Hyper Yache, 3x Hyper Coba, 2x Hyper Roseli"},
+        {"Name": "Air Lock", "Ingredients": "4x Hyper Haban, 4x Hyper Wacan"}
     ],
     "Zeraora (Plasma-Glazed)": [
-        {"Name": "Plasma Bolt", "Ingredients": "3x Hyper Shuca, 3x Hyper Chople"},
-        {"Name": "Electric Mix", "Ingredients": "4x Hyper Cheri, 2x Hyper Wacan"},
-        {"Name": "Quick Charge", "Ingredients": "3x Hyper Occa, 3x Hyper Grepa"}
+        {"Name": "Spark Mix (Variety)", "Ingredients": "1x Shuca, 1x Chople, 1x Cheri, 1x Wacan, 1x Occa, 1x Grepa, 1x Rindo"},
+        {"Name": "Voltage Pairs (Balanced)", "Ingredients": "2x Hyper Shuca, 2x Hyper Chople, 2x Hyper Grepa, 1x Hyper Occa"},
+        {"Name": "Plasma Fist (Bulk)", "Ingredients": "3x Hyper Shuca, 3x Hyper Chople"},
+        {"Name": "Thunderclap", "Ingredients": "4x Hyper Cheri, 2x Hyper Wacan, 2x Hyper Grepa"}
     ]
 }
-
 
 # Load Data
 df = pd.read_csv(StringIO(berry_csv))
@@ -466,7 +472,6 @@ st.markdown("---")
 target_donut_name = st.selectbox(t["select_label"], list(recipes.keys()))
 
 # --- NEW: EXAMPLE RECIPES EXPANDER ---
-# This shows specific examples for the selected donut
 if target_donut_name in EXAMPLE_RECIPES:
     with st.expander(t["examples_label"]):
         example_df = pd.DataFrame(EXAMPLE_RECIPES[target_donut_name])
