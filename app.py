@@ -20,6 +20,9 @@ TRANSLATIONS = {
         "step2": "2. Select the **Donut** you want to craft.",
         "step3": "3. Click **Calculate**.",
         "select_label": "Select Target Donut:",
+        "examples_label": "💡 View Standard Recipes (Examples)",
+        "examples_col_name": "Recipe Name",
+        "examples_col_ing": "Ingredients",
         "inventory_header": "Your Inventory",
         "toggle_stats": "Show Berry Stats",
         "toggle_help": "Check this to see detailed flavor values.",
@@ -41,7 +44,7 @@ TRANSLATIONS = {
         "col_spicy": "🔒 Spicy",
         "col_sour": "🔒 Sour",
         "col_bitter": "🔒 Bitter",
-        "col_fresh": "🔒 Dry/Fresh", # Fresh replaces Dry in newer games usually
+        "col_fresh": "🔒 Fresh",
         "col_boost": "🔒 Lv. Boost",
         "col_cal": "🔒 Cal"
     },
@@ -54,6 +57,9 @@ TRANSLATIONS = {
         "step2": "2. Wähle den **Donut**, den du backen möchtest.",
         "step3": "3. Klicke auf **Berechnen**.",
         "select_label": "Wähle den Ziel-Donut:",
+        "examples_label": "💡 Standard-Rezepte anzeigen (Beispiele)",
+        "examples_col_name": "Rezept-Name",
+        "examples_col_ing": "Zutaten",
         "inventory_header": "Dein Inventar",
         "toggle_stats": "Beeren-Werte anzeigen",
         "toggle_help": "Anklicken, um Details zu Geschmack und Kalorien zu sehen.",
@@ -74,7 +80,7 @@ TRANSLATIONS = {
         "col_spicy": "🔒 Scharf",
         "col_sour": "🔒 Sauer",
         "col_bitter": "🔒 Bitter",
-        "col_fresh": "🔒 Herb/Frisch",
+        "col_fresh": "🔒 Frisch",
         "col_boost": "🔒 Lv. Bonus",
         "col_cal": "🔒 Kal"
     },
@@ -87,6 +93,9 @@ TRANSLATIONS = {
         "step2": "2. Sélectionnez le **Beignet**.",
         "step3": "3. Cliquez sur **Calculer**.",
         "select_label": "Choisir le Beignet :",
+        "examples_label": "💡 Voir Recettes Standards",
+        "examples_col_name": "Nom",
+        "examples_col_ing": "Ingrédients",
         "inventory_header": "Votre Inventaire",
         "toggle_stats": "Afficher les stats",
         "toggle_help": "Voir les détails des saveurs.",
@@ -107,7 +116,7 @@ TRANSLATIONS = {
         "col_spicy": "🔒 Épicé",
         "col_sour": "🔒 Acide",
         "col_bitter": "🔒 Amer",
-        "col_fresh": "🔒 Apre",
+        "col_fresh": "🔒 Frais",
         "col_boost": "🔒 Boost",
         "col_cal": "🔒 Cal"
     },
@@ -120,6 +129,9 @@ TRANSLATIONS = {
         "step2": "2. Seleziona la **Ciambella**.",
         "step3": "3. Clicca su **Calcola**.",
         "select_label": "Seleziona Ciambella:",
+        "examples_label": "💡 Vedi Ricette Standard",
+        "examples_col_name": "Nome",
+        "examples_col_ing": "Ingredienti",
         "inventory_header": "Il tuo Inventario",
         "toggle_stats": "Mostra statistiche",
         "toggle_help": "Vedi i dettagli dei sapori.",
@@ -140,7 +152,7 @@ TRANSLATIONS = {
         "col_spicy": "🔒 Pepato",
         "col_sour": "🔒 Aspro",
         "col_bitter": "🔒 Amaro",
-        "col_fresh": "🔒 Secco",
+        "col_fresh": "🔒 Fresco",
         "col_boost": "🔒 Lv. Boost",
         "col_cal": "🔒 Cal"
     },
@@ -153,6 +165,9 @@ TRANSLATIONS = {
         "step2": "2. Selecciona la **Dona**.",
         "step3": "3. Haz clic en **Calcular**.",
         "select_label": "Seleccionar Dona:",
+        "examples_label": "💡 Ver Recetas Estándar",
+        "examples_col_name": "Nombre",
+        "examples_col_ing": "Ingredientes",
         "inventory_header": "Tu Inventario",
         "toggle_stats": "Mostrar estadísticas",
         "toggle_help": "Ver detalles de sabor.",
@@ -173,7 +188,7 @@ TRANSLATIONS = {
         "col_spicy": "🔒 Picante",
         "col_sour": "🔒 Ácido",
         "col_bitter": "🔒 Amargo",
-        "col_fresh": "🔒 Seco",
+        "col_fresh": "🔒 Fresco",
         "col_boost": "🔒 Niv.+",
         "col_cal": "🔒 Cal"
     },
@@ -186,6 +201,9 @@ TRANSLATIONS = {
         "step2": "2. 만들고 싶은 **도넛**을 선택하세요.",
         "step3": "3. **계산하기** 버튼을 누르세요.",
         "select_label": "도넛 선택:",
+        "examples_label": "💡 추천 레시피 보기 (예시)",
+        "examples_col_name": "레시피 이름",
+        "examples_col_ing": "재료",
         "inventory_header": "보유 열매",
         "toggle_stats": "상세 스탯 표시",
         "toggle_help": "맛과 칼로리 정보를 확인합니다.",
@@ -219,6 +237,9 @@ TRANSLATIONS = {
         "step2": "2. 作りたい**ドーナツ**を選んでください。",
         "step3": "3. **計算する**をクリックしてください。",
         "select_label": "ドーナツを選択:",
+        "examples_label": "💡 標準レシピを表示 (例)",
+        "examples_col_name": "レシピ名",
+        "examples_col_ing": "材料",
         "inventory_header": "バッグの中身",
         "toggle_stats": "ステータスを表示",
         "toggle_help": "味やカロリーの詳細を表示します。",
@@ -252,6 +273,9 @@ TRANSLATIONS = {
         "step2": "2. 选择你要制作的**甜甜圈**。",
         "step3": "3. 点击**计算**。",
         "select_label": "选择甜甜圈：",
+        "examples_label": "💡 查看标准配方 (示例)",
+        "examples_col_name": "配方名称",
+        "examples_col_ing": "配料",
         "inventory_header": "你的库存",
         "toggle_stats": "显示详细数值",
         "toggle_help": "查看口味和卡路里详情。",
@@ -323,6 +347,37 @@ recipes = {
     "Rayquaza (Delta Old-Fashioned)": {"Sweet":120, "Spicy":40,  "Sour":340, "Bitter":40,  "Fresh":390},
     "Zeraora (Plasma-Glazed)":        {"Sweet":40,  "Spicy":200, "Sour":400, "Bitter":280, "Fresh":40}
 }
+
+# --- EXAMPLE RECIPES DATA ---
+# Feel free to edit these ingredients to match game meta.
+EXAMPLE_RECIPES = {
+    "Darkrai (Bad Dream Cruller)": [
+        {"Name": "Sour Boost", "Ingredients": "4x Hyper Payapa, 2x Hyper Colbur"},
+        {"Name": "Dream Mix", "Ingredients": "3x Hyper Chesto, 3x Hyper Payapa, 1x Hyper Haban"},
+        {"Name": "Simple Dark", "Ingredients": "2x Hyper Colbur, 4x Hyper Pecha"}
+    ],
+    "Groudon (Omega Old-Fashioned)": [
+        {"Name": "Magma Mix", "Ingredients": "3x Hyper Tanga, 2x Hyper Grepa, 1x Hyper Pomeg"},
+        {"Name": "Spicy Heavy", "Ingredients": "4x Hyper Chilan, 2x Hyper Cheri"},
+        {"Name": "Fresh Heat", "Ingredients": "3x Hyper Tanga, 3x Hyper Occa"}
+    ],
+    "Kyogre (Alpha Old-Fashioned)": [
+        {"Name": "Deep Sea", "Ingredients": "3x Hyper Kelpsy, 3x Hyper Hondew"},
+        {"Name": "Bitter Wave", "Ingredients": "4x Hyper Rawst, 2x Hyper Passho"},
+        {"Name": "Blue Orb", "Ingredients": "2x Hyper Kelpsy, 4x Hyper Chesto"}
+    ],
+    "Rayquaza (Delta Old-Fashioned)": [
+        {"Name": "Sky High", "Ingredients": "3x Hyper Yache, 3x Hyper Coba"},
+        {"Name": "Ozone Mix", "Ingredients": "4x Hyper Wacan, 2x Hyper Haban"},
+        {"Name": "Dragon Breath", "Ingredients": "3x Hyper Haban, 3x Hyper Roseli"}
+    ],
+    "Zeraora (Plasma-Glazed)": [
+        {"Name": "Plasma Bolt", "Ingredients": "3x Hyper Shuca, 3x Hyper Chople"},
+        {"Name": "Electric Mix", "Ingredients": "4x Hyper Cheri, 2x Hyper Wacan"},
+        {"Name": "Quick Charge", "Ingredients": "3x Hyper Occa, 3x Hyper Grepa"}
+    ]
+}
+
 
 # Load Data
 df = pd.read_csv(StringIO(berry_csv))
@@ -409,6 +464,15 @@ st.markdown("---")
 # --- INPUT SECTION ---
 
 target_donut_name = st.selectbox(t["select_label"], list(recipes.keys()))
+
+# --- NEW: EXAMPLE RECIPES EXPANDER ---
+# This shows specific examples for the selected donut
+if target_donut_name in EXAMPLE_RECIPES:
+    with st.expander(t["examples_label"]):
+        example_df = pd.DataFrame(EXAMPLE_RECIPES[target_donut_name])
+        # Rename columns for the language
+        example_df = example_df.rename(columns={"Name": t["examples_col_name"], "Ingredients": t["examples_col_ing"]})
+        st.table(example_df)
 
 st.subheader(t["inventory_header"])
 
